@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS votes(
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  sprint_id INT REFERENCES sprints(id) ON DELETE CASCADE,
+  vote INT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+  )

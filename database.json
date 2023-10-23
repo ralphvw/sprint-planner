@@ -1,0 +1,9 @@
+{
+  "development": {
+    "ENV": "SPRINT_PLANNER_DB_URL"
+  },
+  "production": {
+    "ENV": "SPRINT_PLANNER_DB_URL"
+  },
+  "sql-file": true
+}

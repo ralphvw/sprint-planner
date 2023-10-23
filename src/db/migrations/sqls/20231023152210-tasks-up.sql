@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS tasks(
+  id SERIAL PRIMARY KEY,
+  points INT,
+  sprint_id INT REFERENCES sprints(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+  )
