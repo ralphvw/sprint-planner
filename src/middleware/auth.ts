@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Helpers from "../helpers/helpers";
 import constants from "../utils/constants";
 import userQueries from "../db/queries/user";
-import { db } from "src/config/db";
+import { db } from "../config/db";
 
 const { checkIfEmailExists } = userQueries;
 const { EMAIL_IS_REQUIRED, EMAIL_ALREADY_EXISTS, INVALID_EMAIL, SERVER_ERROR } =

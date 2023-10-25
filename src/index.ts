@@ -1,9 +1,11 @@
 import express from "express";
 import { db } from "./config/db";
+import routes from "./routes/index";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+app.use("/api/", routes);
 db.connect()
   .then(() => {
     app.listen(PORT, () => {
