@@ -13,7 +13,12 @@ class UserService {
     password,
   }: User): Promise<User> {
     const hashedPassword = await argon2.hash(password!);
-    return db.one(addUser, [email, firstName, lastName, hashedPassword]);
+    return db.one(addUser, [
+      email?.toLowerCase().trim(),
+      firstName,
+      lastName,
+      hashedPassword,
+    ]);
   }
 }
 
