@@ -1,5 +1,5 @@
 import { Response } from "express";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 class Helpers {
   static sendResponse(
@@ -16,7 +16,7 @@ class Helpers {
       const filename = "log.txt";
       data += ` on ${new Date().toDateString()} @ ${new Date().toLocaleTimeString()}`;
       console.info(data);
-      fs.appendFileSync(filename, `${data} \n`);
+      fs.appendFile(filename, `${data} \n`);
     } catch (error) {
       console.info("[LOG_ACTION]", error.message);
     }

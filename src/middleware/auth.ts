@@ -4,6 +4,7 @@ import constants from "../utils/constants";
 import userQueries from "../db/queries/user";
 import { db } from "../config/db";
 import argon2 from "argon2";
+import jwt from "jsonwebtoken";
 
 const { checkIfEmailExists, getUserByEmail } = userQueries;
 const {
@@ -15,6 +16,8 @@ const {
   PASSWORD_TOO_SHORT,
   PASSWORD_IS_REQUIRED,
   INVALID_LOGIN,
+  USER_DOES_NOT_EXIST,
+  TOKEN_IS_REQUIRED,
 } = constants;
 
 const { sendResponse, logAction } = Helpers;
@@ -85,7 +88,9 @@ class AuthMiddleware {
       if (!password) {
         return sendResponse(res, null, PASSWORD_IS_REQUIRED, 400);
       }
-      const user = await db.oneOrNone(getUserByEmail, [req.body.email]);
+      const user = await db.oneOrNone(getUserByEmail, [
+        req.body.email.toLowerCase().trim(),
+      ]);
       if (!user) {
         logAction(`[USER_DOES_NOT_EXIST] ${email}`);
         return sendResponse(res, null, INVALID_LOGIN, 400);
@@ -104,6 +109,53 @@ class AuthMiddleware {
       next();
     } catch (error) {
       logAction(`ERROR: [VALIDATE_USER_MIDDLEWARE] ${error.message}`);
+      return sendResponse(res, null, SERVER_ERROR, 500);
+    }
+  }
+
+  static async getUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.body.email) {
+        return sendResponse(res, null, EMAIL_IS_REQUIRED, 400);
+      }
+      const user = await db.oneOrNone(getUserByEmail, [
+        req.body.email.toLowerCase().trim(),
+      ]);
+      if (!user) {
+        logAction(
+          `[USER_DOES_NOT_EXIST_GET_USER_MIDDLEWARE] ${req.body.email}`,
+        );
+        return sendResponse(res, null, USER_DOES_NOT_EXIST, 400);
+      }
+      const { password, ...rest } = user;
+
+      (req as any).user = rest;
+      next();
+    } catch (error) {
+      logAction(`ERROR: [GET_USER_MIDDLEWARE] ${error.message}`);
+      return sendResponse(res, null, SERVER_ERROR, 500);
+    }
+  }
+
+  static async resetPasswordMiddleWare(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const token = req.body.token;
+      if (!token) {
+        return sendResponse(res, null, TOKEN_IS_REQUIRED, 400);
+      }
+      if (!req.body.password) {
+        return sendResponse(res, null, PASSWORD_IS_REQUIRED, 400);
+      }
+      const user = jwt.verify(token, process.env.SECRET!);
+      (req as any).user = user;
+      (req as any).password = req.body.password;
+      next();
+    } catch (error) {
+      logAction(`ERROR: [RESET_PASSWORD_MIDDLEWARE] ${error.message}`);
       return sendResponse(res, null, SERVER_ERROR, 500);
     }
   }

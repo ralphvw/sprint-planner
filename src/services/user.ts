@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
-const { addUser } = userQueries;
+const { addUser, updatePassword } = userQueries;
 
 class UserService {
   static async signUp({
@@ -26,6 +26,14 @@ class UserService {
 
   static login(user: User) {
     return jwt.sign(user, process.env.SECRET!);
+  }
+
+  static resetPasswordToken(user: User) {
+    return jwt.sign(user, process.env.SECRET!, { expiresIn: "1hr" });
+  }
+
+  static updatePassword(user: User, password: string) {
+    return db.oneOrNone(updatePassword, [password, user.email]);
   }
 }
 

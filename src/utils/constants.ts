@@ -10,4 +10,9 @@ export default {
   PASSWORD_IS_REQUIRED: "Password is required",
   INVALID_LOGIN: "Invalid login",
   WELCOME_USER: (name: string) => `Welcome ${name}`,
+  EMAIL_WAS_NOT_SENT: "Email was not sent",
+  USER_DOES_NOT_EXIST: "User does not exist",
+  RESET_PASSWORD_EMAIL_SENT: "Reset password email was sent successfully",
+  TOKEN_IS_REQUIRED: "Token is required!",
+  PASSWORD_RESET_SUCCESSFULLY: "Password reset successfully!",
 };
