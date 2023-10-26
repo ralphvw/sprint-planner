@@ -15,4 +15,5 @@ export default {
   RESET_PASSWORD_EMAIL_SENT: "Reset password email was sent successfully",
   TOKEN_IS_REQUIRED: "Token is required!",
   PASSWORD_RESET_SUCCESSFULLY: "Password reset successfully!",
+  TOKEN_EXPIRED: "Token has expired",
 };

@@ -18,6 +18,7 @@ const {
   INVALID_LOGIN,
   USER_DOES_NOT_EXIST,
   TOKEN_IS_REQUIRED,
+  TOKEN_EXPIRED,
 } = constants;
 
 const { sendResponse, logAction } = Helpers;
@@ -151,6 +152,10 @@ class AuthMiddleware {
         return sendResponse(res, null, PASSWORD_IS_REQUIRED, 400);
       }
       const user = jwt.verify(token, process.env.SECRET!);
+      if (!user) {
+        logAction(`[TOKEN_EXPIRED]`);
+        return sendResponse(res, null, TOKEN_EXPIRED, 400);
+      }
       (req as any).user = user;
       (req as any).password = req.body.password;
       next();

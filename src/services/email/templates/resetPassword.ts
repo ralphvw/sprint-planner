@@ -2,9 +2,9 @@ export const resetPasswordEmail = (firstName: string, link: string) => `
 
 Hello ${firstName}, 
 <br><br>
-We've received a request to reset your password for your [Your Company Name] account. To complete the password reset process, please click the link below:
+We've received a request to reset your password for your Sprint Team account. To complete the password reset process, please click the link below:
 <br><br>
-[Reset Password Link](${link})
+(${link})
 <br><br>
 If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
 <br><br>
